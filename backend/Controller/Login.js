@@ -19,7 +19,7 @@ const login = async (req, res) => {
 
     const secretKey =
       process.env.JWT_SECRET_KEY || crypto.randomBytes(32).toString("hex");
-    const token = jwt.sign({ userId: user._id }, secretKey, {
+      const token = jwt.sign({ userId: user._id }, secretKey, {
       expiresIn: "1h",
     });
 

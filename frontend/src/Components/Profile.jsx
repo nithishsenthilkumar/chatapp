@@ -48,38 +48,19 @@ const Profile = () => {
 
   return (
     <div className="container-fluid h-screen bg-[#E0B0FF] flex justify-center items-center">
-      <Card className="bg-[#FFF0F5] w-56 p-8 animate__animated animate__zoomIn">
-        <CardHeader floated={true}>
-          <img
-            src="https://docs.material-tailwind.com/img/team-3.jpg"
-            alt="profile-picture"
-            className="rounded-full mb-8"
-          />
-        </CardHeader>
-        {userData && (
-          <CardBody className="text-center">
-            <div className="text-center flex flex-col justify-around items-around">
-              <Typography variant="h4" color="blue-gray">
-                {userData.username}
-              </Typography>
-              <Typography
-                color="blue-gray"
-                className="font-medium"
-                textGradient
-              >
-                {userData.email}
-              </Typography>
-              <Typography
-                color="blue-gray"
-                className="font-medium"
-                textGradient
-              >
-                {userData.mobile}
-              </Typography>
-            </div>
-          </CardBody>
-        )}
-      </Card>
+      {userData && (
+        <div className="text-center flex flex-col justify-around items-around">
+          <Typography variant="h4" color="blue-gray">
+            {userData.username}
+          </Typography>
+          <Typography color="blue-gray" className="font-medium" textGradient>
+            {userData.email}
+          </Typography>
+          <Typography color="blue-gray" className="font-medium" textGradient>
+            {userData.mobile}
+          </Typography>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import { TiAttachmentOutline } from "react-icons/ti";
@@ -18,11 +18,20 @@ const Chat = ({ name, mobile, onBack }) => {
   const [sentmessage, setSentMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [id, setId] = useState("");
+  const messagesEndRef = useRef(null);
 
   useEffect(() => {
     const interval = setInterval(fetchMessage, 200);
     return () => clearInterval(interval);
   }, [mobile, token]);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   const fetchMessage = async () => {
     try {
@@ -104,9 +113,14 @@ const Chat = ({ name, mobile, onBack }) => {
           <button onClick={handleBack}>
             <BsArrowLeftShort className="text-3xl" />
           </button>
-          <div className="ml-4">
-            <h2 className="font-bold text-lg">{name}</h2>
-            <h3 className="font-semibold text-md">{mobile}</h3>
+          <div className="flex items-center ml-3">
+            <div>
+              <BsPersonCircle className="text-4xl" />
+            </div>
+            <div className="ml-4">
+              <h2 className="font-bold text-lg">{name}</h2>
+              <h3 className="font-semibold text-md">{mobile}</h3>
+            </div>
           </div>
         </div>
         <div className="flex space-x-4 items-center">
@@ -116,7 +130,7 @@ const Chat = ({ name, mobile, onBack }) => {
         </div>
       </div>
 
-      <div className="flex flex-col bg-[#E0B0FF] px-4 py-2 mt-20 space-y-4 flex-1 overflow-y-scroll">
+      <div className="flex flex-col bg-[#E0B0FF] px-4 py-2 mt-20 space-y-1 flex-1 overflow-y-scroll">
         {Object.entries(groupedMessages).map(([date, messages], index) => (
           <div key={index} className="flex flex-col">
             <div className="flex items-center justify-center mb-2">
@@ -151,8 +165,9 @@ const Chat = ({ name, mobile, onBack }) => {
             ))}
           </div>
         ))}
+        <div ref={messagesEndRef} />
       </div>
-      <div className="bg-[#E0B0FF] py-2 px-4">
+      <div className="bg-[#E0B0FF] py-2 px-4 pb-4">
         <div className="flex items-center">
           <div className="relative flex-1">
             <input

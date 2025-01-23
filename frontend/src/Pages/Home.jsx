@@ -11,6 +11,7 @@ import {
   BsPersonFill,
 } from "react-icons/bs";
 import { useLocation } from "react-router-dom";
+import MobileNav from "../Components/MobileNav";
 
 export default function Home() {
   const [isProfileVisible, setProfileVisible] = useState(false);
@@ -20,6 +21,7 @@ export default function Home() {
   const [isToolVisible, setToolVisible] = useState(false);
   const [isChatActive, setChatActive] = useState(false);
   const location = useLocation();
+  const [isMobile, setMobile] = useState(false);
   const [selectedFriend, setSelectedFriend] = useState(null);
   const [friends, setFriends] = useState([]);
   const token = location.state ? location.state.token : null;
@@ -77,6 +79,15 @@ export default function Home() {
   };
 
   useEffect(() => {
+    function checkScreenSize() {
+      setMobile(window.innerWidth<500);
+    }
+    window.addEventListener("resize", checkScreenSize);
+    checkScreenSize();
+    return () => window.removeEventListener("resize", checkScreenSize);
+  }, []);
+
+  useEffect(() => {
     fetchFriends();
   }, [token]);
 
@@ -116,7 +127,7 @@ export default function Home() {
                   onClick={() => handleSelectFriend(friend)}
                   className="py-2 flex justify-center w-full"
                 >
-                  <div className="flex justify-start items-center bg-[#FFF0F5] py-2 px-4 rounded-lg w-11/12 animate__animated animate__fadeInUpBig">
+                  <div className="flex justify-start items-center bg-[#FFF0F5] py-2 px-4 rounded-lg w-11/12 animate__animated animate__fadeInUp">
                     <div>
                       <BsPersonCircle className="text-3xl" />
                     </div>
@@ -139,27 +150,7 @@ export default function Home() {
           </div>
         )}
       </div>
-      {!isChatActive && (
-        <div className="navbar">
-          <div className="fixed bottom-0 left-0 py-4 w-full flex justify-around items-center bg-[#800080] shadow-md py-2 rounded-t-xl">
-            <button className="focus:outline-none" onClick={toggleProfile}>
-              <BsPersonFill className="text-2xl text-white" />
-            </button>
-            <button className="focus:outline-none">
-              <BsPeopleFill className="text-2xl text-white" />
-            </button>
-            <button className="focus:outline-none" onClick={toggleFriends}>
-              <BsFillChatLeftFill className="text-2xl text-white" />
-            </button>
-            <button className="focus:outline-none">
-              <BsTelephoneFill className="text-2xl text-white" />
-            </button>
-            <button className="focus:outline-none">
-              <BsTools className="text-2xl text-white" />
-            </button>
-          </div>
-        </div>
-      )}
+      <div>{isMobile ? <MobileNav /> : console.log("above mobile screen")}</div>
     </div>
   );
 }
